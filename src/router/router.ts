@@ -1,12 +1,11 @@
 import * as express from "express";
-import prisma from "../db/prisma";
+import prisma from "../../db/prisma";
+import { eventsService } from "../services/events/events.service";
 
 const router = express.Router();
 
 router.get("/events", async (req, res) => {
-  const event = await prisma.events.findFirst();
-  res.json(event);
-  console.log("req");
+  res.json(eventsService.getEvents());
 });
 router.get("*", async (req, res) => {
   res.status(404).send("not found");
