@@ -1,0 +1,55 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+//User table
+model User {
+  id       String @id @default(dbgenerated("prefix_uuid('user_'::text)"))
+  name     String
+  email    String
+  password String
+  event Events[]
+  
+}
+
+//Events table
+model Events{
+  id    String @id @default(dbgenerated("prefix_uuid('evt_'::text)"))
+  object  String
+  actor_id  String 
+  user User @relation(fields: [actor_id],references: [id])
+  actor_name String 
+  group String
+  action_id String
+  action Action @relation(fields: [action_id] ,references: [id])
+  target_id  String
+  target_name  String
+  location String 
+  occured_at DateTime? @default(now())
+  metadata_id String @unique
+  metadata Metadata @relation(fields: [metadata_id],references: [x_request_id])
+}
+model Action{
+  id  String @id @default(dbgenerated("prefix_uuid('user_'::text)"))
+  object String
+  name Actions?
+  event Events[]
+}
+model Metadata{
+redirect String
+description String
+x_request_id  String @id @default(dbgenerated("prefix_uuid('req_'::text)"))
+event Events?
+}
+enum Actions{
+  LOGGED_IN
+}
+ 
