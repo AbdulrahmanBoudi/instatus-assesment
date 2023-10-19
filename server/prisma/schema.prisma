@@ -16,7 +16,8 @@ model User {
   name     String
   email    String
   password String
-  event Events[]
+  actorEvent Events[] @relation("actorRelation")
+  targetEvent Events[] @relation("targetRelation")
   
 }
 
@@ -25,13 +26,12 @@ model Events{
   id    String @id @default(dbgenerated("prefix_uuid('evt_'::text)"))
   object  String
   actor_id  String 
-  user User @relation(fields: [actor_id],references: [id])
-  actor_name String 
+  actor User @relation("actorRelation",fields: [actor_id],references: [id])
   group String
   action_id String
   action Action @relation(fields: [action_id] ,references: [id])
-  target_id  String
-  target_name  String
+  target User? @relation("targetRelation",fields: [target_id],references: [id])
+  target_id  String? 
   location String 
   occured_at DateTime? @default(now())
   metadata_id String @unique
