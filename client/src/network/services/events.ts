@@ -57,3 +57,14 @@ export async function createEvent({
     });
   return result;
 }
+export async function getCount(): Promise<number> {
+  const result = await client
+    .get({ url: "test/events/count" })
+    .then((res) => {
+      return res.data;
+    })
+    .catch((e) => {
+      return e.response.status;
+    });
+  return result;
+}

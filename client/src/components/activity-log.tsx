@@ -3,7 +3,7 @@ import axios from "axios";
 import { Events } from "../models/events";
 import moment from "moment";
 import { useMutation, useQuery } from "react-query";
-import { getEvents, searchEvents } from "../network/services/events";
+import { getCount, getEvents, searchEvents } from "../network/services/events";
 import useGetEvents from "../hooks/useGetEvents";
 
 function ActivityLog() {
@@ -53,6 +53,7 @@ function ActivityLog() {
   const [visibleRow, setVisibleRow] = useState<number | null>(null);
   const [searchInput, setSearchInput] = useState<string | null>(null);
   const [page, setPage] = useState(1);
+  const [dataCount, setDataCount] = useState<number>(0);
   const { data, error, isLoading, isSuccess, refetch } = useGetEvents({
     page: page,
     offset: 10,
@@ -71,6 +72,12 @@ function ActivityLog() {
       }
     },
   });
+
+  const {
+    data: count,
+    refetch: refetchCount,
+    isSuccess: countSuccess,
+  } = useQuery("count", getCount);
 
   useEffect(() => {
     if (searchSuccess && searchData) {
@@ -93,8 +100,15 @@ function ActivityLog() {
   useEffect(() => {
     if (data?.data) {
       setEvents([...events, ...data?.data?.events]);
+      refetchCount();
     }
   }, [data]);
+
+  useEffect(() => {
+    if (countSuccess) {
+      setDataCount(count);
+    }
+  }, [count, countSuccess]);
 
   const renderSpinner = () => {
     return (
@@ -289,6 +303,7 @@ function ActivityLog() {
                 return p + 1;
               })
             }
+            disabled={count! < page * 10}
           >
             Load More
           </button>

@@ -16,6 +16,15 @@ router.post("/events", async (req, res) => {
   }
 });
 
+router.get("/events/count", async (req, res) => {
+  try {
+    const count = await eventsService.getCount();
+    res.json(count);
+  } catch (e) {
+    res.sendStatus(400);
+  }
+});
+
 router.post("/events/search", async (req, res) => {
   const { param } = req.query;
 
@@ -50,14 +59,6 @@ router.post("/createevents", async (req, res) => {
     } else {
       res.sendStatus(400);
     }
-  }
-});
-router.get("/count", async (req, res) => {
-  try {
-    const count = await eventsService.getCount();
-    res.json(count);
-  } catch (e) {
-    res.sendStatus(400);
   }
 });
 
