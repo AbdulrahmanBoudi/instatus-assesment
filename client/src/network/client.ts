@@ -4,7 +4,7 @@ class Client {
   clientInstance: AxiosInstance;
   constructor() {
     this.clientInstance = axios.create({
-      baseURL: "http://localhost:3300/",
+      baseURL: "https://assessment-api-bmjl.onrender.com/",
     });
   }
 
