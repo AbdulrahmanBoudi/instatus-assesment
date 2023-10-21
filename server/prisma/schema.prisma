@@ -3,6 +3,9 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+  binaryTargets = ["native", "rhel-openssl-1.0.x"]
+
 }
 
 datasource db {
@@ -18,6 +21,8 @@ model User {
   password String
   actorEvent Events[] @relation("actorRelation")
   targetEvent Events[] @relation("targetRelation")
+  @@unique([id,name,email])
+  @@unique([id,name])
   
 }
 
@@ -26,22 +31,27 @@ model Events{
   id    String @id @default(dbgenerated("prefix_uuid('evt_'::text)"))
   object  String
   actor_id  String 
-  actor User @relation("actorRelation",fields: [actor_id],references: [id])
+  actor User @relation("actorRelation",fields: [actor_id,actor_name,email],references: [id,name,email])
+  actor_name String
+  email String
   group String
   action_id String
-  action Action @relation(fields: [action_id] ,references: [id])
-  target User? @relation("targetRelation",fields: [target_id],references: [id])
+  action Action @relation(fields: [action_id,action_name] ,references: [id,name])
+  action_name String
+  target User? @relation("targetRelation",fields: [target_id,target_name],references: [id,name])
   target_id  String? 
+  target_name String?
   location String 
   occured_at DateTime? @default(now())
   metadata_id String @unique
   metadata Metadata @relation(fields: [metadata_id],references: [x_request_id])
 }
 model Action{
-  id  String @id @default(dbgenerated("prefix_uuid('user_'::text)"))
+  id  String @id @default(dbgenerated("prefix_uuid('evt_act_'::text)"))
   object String
-  name Actions
+  name String @unique
   event Events[]
+  @@unique([id,name])
 }
 model Metadata{
 redirect String
@@ -49,7 +59,5 @@ description String
 x_request_id  String @id @default(dbgenerated("prefix_uuid('req_'::text)"))
 event Events?
 }
-enum Actions{
-  LOGGED_IN
-}
+
  

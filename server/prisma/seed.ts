@@ -10,7 +10,7 @@ function seedUsers() {
 }
 function seedActions() {
   prisma.action
-    .create({ data: { name: "LOGGED_IN", object: "event_object" } })
+    .create({ data: { name: "user.login_succeeded", object: "event_object" } })
     .then(() => console.log("action seeded successfully"))
     .catch(() => console.log("failed to seed action"));
 }
