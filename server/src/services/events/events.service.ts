@@ -16,7 +16,7 @@ async function getEvents(page: number, offset: number) {
 }
 async function getCount() {
   const count = await prisma.events.count({ select: { _all: true } });
-  return count;
+  return count._all;
 }
 async function createEvent(
   // event: Events,

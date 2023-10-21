@@ -77,9 +77,6 @@ function ActivityLog() {
       setEvents(searchData);
     }
   }, [searchData, searchSuccess]);
-  // useEffect(() => {
-  //   if (data?.data) setEvents(data?.data?.events);
-  // }, [data]);
 
   useEffect(() => {
     if (searchInput) {
