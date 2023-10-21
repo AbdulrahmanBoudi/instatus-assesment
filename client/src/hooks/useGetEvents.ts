@@ -9,7 +9,7 @@ const useGetEvents = ({
   offset: number;
 }) => {
   const { isLoading, error, data, isSuccess, refetch } = useQuery({
-    queryKey: "events",
+    queryKey: ["events", page],
     queryFn: () => getEvents(page, offset),
   });
 

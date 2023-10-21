@@ -52,5 +52,13 @@ router.post("/createevents", async (req, res) => {
     }
   }
 });
+router.get("/count", async (req, res) => {
+  try {
+    const count = await eventsService.getCount();
+    res.json(count);
+  } catch (e) {
+    res.sendStatus(400);
+  }
+});
 
 export default router;

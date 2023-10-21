@@ -14,6 +14,10 @@ async function getEvents(page: number, offset: number) {
     return events;
   }
 }
+async function getCount() {
+  const count = await prisma.events.count({ select: { _all: true } });
+  return count;
+}
 async function createEvent(
   // event: Events,
   action_name: string,
@@ -97,4 +101,4 @@ async function createMetadata(action_name: string) {
   return meta;
 }
 
-export const eventsService = { getEvents, createEvent, searchEvent };
+export const eventsService = { getEvents, createEvent, searchEvent, getCount };
